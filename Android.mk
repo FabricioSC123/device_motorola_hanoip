@@ -16,7 +16,10 @@
 
 LOCAL_PATH := $(call my-dir)
 
-ifneq ($(filter foles parker def liber odessa minsk hanoip,$(TARGET_DEVICE)),)
+ifneq ($(filter hanoip, $(TARGET_DEVICE)),)
+  subdir_makefiles=$(call first-makefiles-under,$(LOCAL_PATH))
+  $(foreach mk,$(subdir_makefiles),$(info including $(mk) ...)$(eval include $(mk)))
+  
 include $(call all-makefiles-under,$(LOCAL_PATH))
 
 include $(CLEAR_VARS)

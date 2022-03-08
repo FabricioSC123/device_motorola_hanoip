@@ -13,6 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+PRODUCT_BUILD_SUPER_PARTITION := false
+PRODUCT_SHIPPING_API_LEVEL := 30
+PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
 # Enable updating of APEXes
 $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
@@ -21,16 +24,77 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/gsi_keys.mk)
 
 # Get non-open-source specific aspects
-$(call inherit-product-if-exists, vendor/motorola/sm6150-common/sm6150-common-vendor.mk)
+$(call inherit-product, vendor/motorola/hanoip/hanoip-vendor.mk)
 
-# Additional native libraries
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/public.libraries.txt:$(TARGET_COPY_OUT_VENDOR)/etc/public.libraries.txt
+# A/B
+AB_OTA_PARTITIONS += vendor_boot
 
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay \
+    $(LOCAL_PATH)/overlay-sc \
     $(LOCAL_PATH)/overlay-lineage
+
+PRODUCT_ENFORCE_RRO_EXCLUDED_OVERLAYS += \
+    $(LOCAL_PATH)/overlay-lineage/lineage-sdk
+
+PRODUCT_PACKAGES += \
+	NoCutoutOverlay
+
+# Audio
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/audio/audio_ext_spkr.conf:$(TARGET_COPY_OUT_VENDOR)/etc/audio_ext_spkr.conf \
+    $(LOCAL_PATH)/audio/audio_platform_info.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_platform_info.xml \
+    $(LOCAL_PATH)/audio/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml
+
+# Power
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/power/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
+
+# Init
+PRODUCT_PACKAGES += \
+    init.mmi.overlay.rc \
+    init.oem.fingerprint.sh \
+    init.oem.fingerprint2.sh \
+    fstab.qcom_ramdisk
+
+# Lights
+PRODUCT_PACKAGES += \
+    android.hardware.lights-service.hanoip
+
+# NFC
+PRODUCT_PACKAGES += \
+    android.hardware.nfc@1.2-service \
+    com.android.nfc_extras \
+    SecureElement \
+    NfcNci \
+    Tag
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/nfc/libnfc-nci.conf:$(TARGET_COPY_OUT_VENDOR)/etc/libnfc-nci.conf \
+    $(LOCAL_PATH)/nfc/libnfc-nxp.conf:$(TARGET_COPY_OUT_VENDOR)/etc/libnfc-nxp.conf
+
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.nfc.hce.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.hce.xml \
+    frameworks/native/data/etc/android.hardware.nfc.hcef.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.hcef.xml \
+    frameworks/native/data/etc/android.hardware.nfc.uicc.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/android.hardware.nfc.uicc.xml \
+    frameworks/native/data/etc/android.hardware.nfc.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.xml
+
+# Sensors
+PRODUCT_PACKAGES += \
+    android.hardware.sensors@2.0-service.multihal
+
+# Soong namespaces
+PRODUCT_SOONG_NAMESPACES += \
+    $(LOCAL_PATH)
+
+# Vendor Service Manager
+PRODUCT_PACKAGES += \
+    vndservicemanager
+
+# Additional native libraries
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/public.libraries.txt:$(TARGET_COPY_OUT_VENDOR)/etc/public.libraries.txt
 
 PRODUCT_ENFORCE_RRO_TARGETS := *
 PRODUCT_ENFORCE_RRO_EXCLUDED_OVERLAYS += \
@@ -167,6 +231,24 @@ PRODUCT_PACKAGES += \
     vendor.qti.hardware.btconfigstore@1.0.vendor \
     vendor.qti.hardware.btconfigstore@2.0.vendor
 
+# Properties for hanoip
+
+# Camera
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.vendor.camera.physical.num=5
+
+# Graphics
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.sys.sf.color_mode=0
+
+# Sensor
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
+    ro.hardware.sensors=hanoip \
+    ro.vendor.sensors.mot_ltv=true \
+    ro.vendor.sensors.glance_approach=false
+    
+#
+    
 # Camera
 PRODUCT_PACKAGES += \
     android.frameworks.displayservice@1.0 \

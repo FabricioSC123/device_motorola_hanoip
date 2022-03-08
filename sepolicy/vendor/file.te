@@ -13,6 +13,9 @@ type cutback_data_file, file_type, data_file_type;
 type cutback_socket, file_type;
 type audio_cutback_data_file, file_type, data_file_type;
 
+# Fingerprint
+type sysfs_fingerprint, sysfs_type, fs_type;
+
 # Power
 type sysfs_msm_subsys, sysfs_type, fs_type;
 type sysfs_scsi_devices_0000, sysfs_type, fs_type;

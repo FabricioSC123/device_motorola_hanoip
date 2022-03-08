@@ -18,7 +18,33 @@ BUILD_BROKEN_DUP_RULES := true
 
 BOARD_VENDOR := motorola
 
-VENDOR_PATH := device/motorola/sm6150-common
+DEVICE_PATH := device/motorola/hanoip
+
+# Board Info
+TARGET_BOARD_INFO_FILE := $(DEVICE_PATH)/board-info.txt
+
+# Display
+TARGET_SCREEN_DENSITY := 420
+
+# HIDL
+DEVICE_MANIFEST_FILE += $(DEVICE_PATH)/manifest.xml
+
+# Kernel
+TARGET_KERNEL_CONFIG := vendor/hanoip_defconfig
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
+BOARD_BOOT_HEADER_VERSION := 3
+BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
+
+# Partitions
+BOARD_USES_RECOVERY_AS_BOOT := true
+TARGET_NO_RECOVERY := true
+
+# Verified Boot
+BOARD_AVB_VBMETA_SYSTEM := system product
+BOARD_AVB_VBMETA_SYSTEM_KEY_PATH := external/avb/test/data/testkey_rsa2048.pem
+BOARD_AVB_VBMETA_SYSTEM_ALGORITHM := SHA256_RSA2048
+BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
+BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX_LOCATION := 1
 
 # Architecture
 TARGET_ARCH := arm64
@@ -118,7 +144,7 @@ USE_CUSTOM_AUDIO_POLICY := 1
 USE_XML_AUDIO_POLICY_CONF := 1
 
 # Bluetooth
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(VENDOR_PATH)/bluetooth/include
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(DEVICE_PATH)/bluetooth/include
 TARGET_FWK_SUPPORTS_FULL_VALUEADDS := true
 TARGET_USE_QTI_BT_STACK := true
 
@@ -153,8 +179,8 @@ TARGET_ENABLE_MEDIADRM_64 := true
 
 # Filesystem
 TARGET_FS_CONFIG_GEN := \
-    $(VENDOR_PATH)/config.fs \
-    $(VENDOR_PATH)/mot_aids.fs
+    $(DEVICE_PATH)/config.fs \
+    $(DEVICE_PATH)/mot_aids.fs
 
 # FM
 BOARD_HAVE_QCOM_FM := true
@@ -168,11 +194,11 @@ TARGET_NO_RPC := true
 USE_DEVICE_SPECIFIC_GPS := true
 
 # HIDL
-DEVICE_MATRIX_FILE := $(VENDOR_PATH)/compatibility_matrix.xml
-DEVICE_MANIFEST_FILE := $(VENDOR_PATH)/manifest.xml
+DEVICE_MATRIX_FILE := $(DEVICE_PATH)/compatibility_matrix.xml
+DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/manifest.xml
 
 # Init
-TARGET_INIT_VENDOR_LIB := //$(VENDOR_PATH):libinit_sm6150
+TARGET_INIT_VENDOR_LIB := //$(DEVICE_PATH):libinit_sm6150
 TARGET_RECOVERY_DEVICE_MODULES := libinit_sm6150
 
 # Partitions
@@ -208,9 +234,9 @@ TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 ifeq ($(PRODUCT_USE_DYNAMIC_PARTITIONS), true)
-TARGET_RECOVERY_FSTAB := $(VENDOR_PATH)/rootdir/etc/fstab_dynamic.qcom
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab_dynamic.qcom
 else
-TARGET_RECOVERY_FSTAB := $(VENDOR_PATH)/rootdir/etc/fstab.qcom
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.qcom
 endif
 
 # RIL
@@ -223,8 +249,8 @@ VENDOR_SECURITY_PATCH := 2021-01-01
 # SELinux
 TARGET_SEPOLICY_DIR := msmsteppe
 include device/qcom/sepolicy_vndr/SEPolicy.mk
-BOARD_PLAT_PRIVATE_SEPOLICY_DIR += $(VENDOR_PATH)/sepolicy/private
-BOARD_VENDOR_SEPOLICY_DIRS += $(VENDOR_PATH)/sepolicy/vendor
+BOARD_PLAT_PRIVATE_SEPOLICY_DIR += $(DEVICE_PATH)/sepolicy/private
+BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
 
 # Android Verified Boot
 BOARD_AVB_ENABLE := true

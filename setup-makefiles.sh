@@ -8,6 +8,9 @@
 
 set -e
 
+export DEVICE=hanoip
+export VENDOR=motorola
+
 # Load extract_utils and do some sanity checks
 MY_DIR="${BASH_SOURCE%/*}"
 if [[ ! -d "${MY_DIR}" ]]; then MY_DIR="${PWD}"; fi
@@ -22,7 +25,7 @@ fi
 source "${HELPER}"
 
 # Initialize the helper for common
-setup_vendor "${DEVICE_COMMON}" "${VENDOR}" "${ANDROID_ROOT}" true
+setup_vendor "${DEVICE}" "${VENDOR}" "${ANDROID_ROOT}" true
 
 # Copyright headers and guards
 write_headers "foles parker def liber odessa minsk hanoip"
