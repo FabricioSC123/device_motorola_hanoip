@@ -1,4 +1,4 @@
-# Android Device configuration for Motorola G9 Plus
+# Android Device configuration for Motorola
 
 ## Device specifications
 
@@ -15,5 +15,3 @@ Dimensions | 170 x 78.1 x 9.7 mm
 Display | 1080 x 2400 pixels, 6.81" LTPS IPS LCD, HDR10
 Rear Camera  | 64 MP (f/1.8) + 8 MP (ultrawide) + 2 MP (macro) + 2 MP (depth)
 Front Camera | 25 MP (f/2.0)
-
-![Device Picture](https://fdn2.gsmarena.com/vv/pics/motorola/motorola-moto-g9-plus-2.jpg)
