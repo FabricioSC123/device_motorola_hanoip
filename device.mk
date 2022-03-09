@@ -121,7 +121,7 @@ PRODUCT_PACKAGES += \
     otapreopt_script
 
 ifeq ($(filter %_foles %_parker,$(TARGET_PRODUCT)),)
-$(call inherit-product, device/motorola/sm6150-common/common_dynamic.mk)
+$(call inherit-product, device/motorola/hanoip/common_dynamic.mk)
 endif
 
 # Properties
