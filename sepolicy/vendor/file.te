@@ -1,12 +1,18 @@
 # Partitions
 type fsg_firmware_file, file_type, contextmount_type, vendor_file_type;
 
+# Fingerprint
+type sysfs_fingerprint, sysfs_type, fs_type;
+
 # charge_only_mode
 type chargeonly_data_file, file_type, data_file_type;
 type persist_chargeonly_file, file_type, data_file_type;
 
 # ADSPD
 type sysfs_adspd, sysfs_type, fs_type;
+
+# Fingerprint 
+type fingerprint_device, dev_type;
 
 # Cutback
 type cutback_data_file, file_type, data_file_type;
