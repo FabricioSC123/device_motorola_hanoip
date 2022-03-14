@@ -20,6 +20,7 @@ PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
 # Get non-open-source specific aspects
 $(call inherit-product, vendor/motorola/hanoip/hanoip-vendor.mk)
+$(call inherit-product, vendor/motorola/sm6150-common/sm6150-common-vendor.mk)
 
 # Enable updating of APEXes
 $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
@@ -34,7 +35,7 @@ PRODUCT_COPY_FILES += \
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay \
-    $(LOCAL_PATH)/overlay-lineage
+    $(LOCAL_PATH)/overlay-lineage \
     $(LOCAL_PATH)/overlay-sc
 
 PRODUCT_ENFORCE_RRO_TARGETS := *
@@ -171,6 +172,32 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES_DEBUG += \
     bootctl
+
+# Speed profile services and wifi-service to reduce RAM and storage
+PRODUCT_SYSTEM_SERVER_COMPILER_FILTER := speed-profile
+PRODUCT_USE_PROFILE_FOR_BOOT_IMAGE := true
+PRODUCT_DEX_PREOPT_BOOT_IMAGE_PROFILE_LOCATION := frameworks/base/config/boot-image-profile.txt
+PRODUCT_ALWAYS_PREOPT_EXTRACTED_APK := true
+DONT_DEXPREOPT_PREBUILTS := true
+USE_DEX2OAT_DEBUG := false
+PRODUCT_MINIMIZE_JAVA_DEBUG_INFO := true
+PRODUCT_ART_TARGET_INCLUDE_DEBUG_BUILD := false
+
+PRODUCT_DEXPREOPT_SPEED_APPS += \
+    Settings \
+    SystemUI
+
+# A/B
+ifeq ($(TARGET_IS_VAB),true)
+# Inherit virtual_ab_ota product
+$(call inherit-product, \
+    $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
+
+AB_OTA_POSTINSTALL_CONFIG += \
+    RUN_POSTINSTALL_vendor=true \
+    POSTINSTALL_PATH_vendor=bin/checkpoint_gc \
+    FILESYSTEM_TYPE_vendor=ext4 \
+    POSTINSTALL_OPTIONAL_vendor=true
 
 # Bluetooth
 PRODUCT_PACKAGES += \
@@ -354,7 +381,7 @@ PRODUCT_PACKAGES += \
 # LiveDisplay
 PRODUCT_PACKAGES += \
     vendor.lineage.livedisplay@2.0-service-sdm \
-    vendor.lineage.livedisplay@2.0-service-sysfs.motorola_sm6150
+    vendor.lineage.livedisplay@2.0-service-sysfs.sm6150
 
 # Media
 PRODUCT_COPY_FILES += \

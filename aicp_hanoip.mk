@@ -22,17 +22,14 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, device/motorola/hanoip/device.mk)
 
 # Inherit some common Lineage stuff.
-$(call inherit-product, vendor/lineage/config/common_full_phone.mk)
+$(call inherit-product, vendor/aicp/config/common_full_phone.mk)
 
 # Device identifier. This must come after all inclusions.
-PRODUCT_NAME := lineage_hanoip
+PRODUCT_NAME := aicp_hanoip
 PRODUCT_DEVICE := hanoip
 PRODUCT_BRAND := motorola
 PRODUCT_MODEL := moto g(60)
 PRODUCT_MANUFACTURER := motorola
-
-PRODUCT_AAPT_CONFIG := xxxhdpi
-PRODUCT_AAPT_PREF_CONFIG := xxxhdpi
 
 # Boot animation
 TARGET_SCREEN_HEIGHT := 2400
